@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QFileDialog
 from source.lib.core import find_match, get_file_extension
 
 from os import path, listdir, rename
-
+from datetime import datetime
 import pandas as pd
 
 
@@ -11,6 +11,7 @@ class MainWindow(QObject):
     filePathChanged = pyqtSignal()
     folderPathChanged = pyqtSignal()
     startEnabled = pyqtSignal()
+    log = pyqtSignal(str, arguments=['log'])
 
     def __init__(self):
         QObject.__init__(self)
@@ -52,6 +53,9 @@ class MainWindow(QObject):
         self.filePath = QFileDialog.getOpenFileName(filter="Excel (*.xls, *.xlsx)")[0]
         self.filePathChanged.emit()
 
+    def log_message(self, message):
+        self.log.emit(f'{datetime.now()}: {message}')
+
     @pyqtSlot()
     def start(self):
         targets = list(pd.read_excel(self.filePath, usecols=(0), squeeze=True, header=None))
@@ -64,8 +68,8 @@ class MainWindow(QObject):
                 if target:
                     target += get_file_extension(file)
 
-                    print(f'Renaming {file} -> {target}')
+                    self.log_message(f'Renaming {file} -> {target}')
                     rename(path.join(self.folderPath, file), path.join(self.folderPath, target))
 
             except Exception as e:
-                print(e)
+                self.log_message(str(e))

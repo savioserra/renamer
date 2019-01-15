@@ -11,14 +11,14 @@ ApplicationWindow {
 
     GridLayout {
         id: grid
-        anchors.rightMargin: 40
-        anchors.leftMargin: 40
-        anchors.bottomMargin: 40
-        anchors.topMargin: 40
-        flow: Grid.TopToBottom
+        anchors.rightMargin: 10
+        anchors.leftMargin: 10
+        anchors.bottomMargin: 10
+        anchors.topMargin: 10
         anchors.fill: parent
+        flow: Grid.TopToBottom
         columns: 2
-        rows: 3
+        rows: 4
 
         TextField {
             placeholderText: "Caminho do arquivo .xlsx"
@@ -34,12 +34,24 @@ ApplicationWindow {
             text: MainWindow.folderPath
         }
 
+        Flickable {
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            TextArea.flickable: TextArea {
+                id: logArea
+                wrapMode: Text.NoWrap
+                anchors.fill: parent
+            }
+        }
+
         Button {
             text: "Iniciar"
             Layout.fillWidth: true
             Layout.columnSpan:  2
-            enabled: MainWindow.isStartEnabled
             onClicked: MainWindow.start()
+            enabled: MainWindow.isStartEnabled
         }
 
         Button {
@@ -54,6 +66,14 @@ ApplicationWindow {
             Layout.maximumWidth: 150
             Layout.fillWidth: true
             onClicked: MainWindow.selectFolder()
+        }
+    }
+
+    Connections {
+        target: MainWindow
+
+        onLog: {
+            logArea.append(log)
         }
     }
 }

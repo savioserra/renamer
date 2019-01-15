@@ -1,0 +1,15 @@
+{
+    "python.formatting.provider": "yapf",
+    "search.exclude": {
+        "**/__pycache__/": true,
+        "**/build/": true,
+        "**/dist/": true,
+        "**/*.qmlc": true
+    },
+    "files.exclude": {
+        "**/__pycache__/": true,
+        "**/build/": true,
+        "**/dist/": true,
+        "**/*.qmlc": true
+    }
+}
